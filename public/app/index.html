@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>Simple Angular JS</title>
+	<script  type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
+</head>
+<body ng-controller="MainCtrl as vm">
+
+
+<div>
+
+<div>
+	<h3>Add</h3>
+	<input type="text" ng-model="vm.new.name">
+	<button ng-click='vm.save(vm.new)'>Edit</button>
+</div>
+<ul>
+	<li ng-repeat="task in vm.tasks">{{  task.name  }}
+	<input type="text" ng-model="vm.current.name" ng-show="vm.current && vm.current.id == task.id">
+	<button ng-click='vm.edit(task)'>Edit</button>
+	<button ng-click='vm.delete(task)'>delete</button>
+	</li>
+</ul>	
+</div>
+
+
+
+<script type="text/javascript">
+	// (function(){
+		'use strict';
+		var app = angular.module('app', [])
+		.constant('api', '/api/v1')
+		.controller('MainCtrl', ['$scope','taskService', function ($scope, taskService) {
+			
+			var vm = this;
+			vm.tasks = [];
+			vm.current = {id:null};
+			vm.new = {name:null};
+
+			function load(){
+				taskService
+			.getTasks()
+			.then(function(response){
+				vm.tasks = response.data
+				});
+
+			}
+			
+			vm.save = function(task){
+				taskService
+				.save(task)
+				.then(function(response){
+					vm.tasks.push(response.data);
+					alert("saved successfuly");
+				})
+			}
+
+			vm.edit = function(task){
+				if (task.id == vm.current.id) {
+					
+					taskService
+					.update(task.id, vm.current)
+					.then(function(response){
+						
+						task = vm.current;
+						vm.current = {id:null};
+						load();
+					})
+
+				}else{
+					vm.current = angular.copy(task);
+				}
+			}
+
+			vm.delete = function(task){
+				taskService
+				.delete(task.id)
+				.then(function(response){
+					alert("deleted successfuly");
+					load();
+				})
+			}
+			
+			load();
+
+		}])
+		.factory('taskService', ['api','$http', function (api,$http) {
+			
+			
+			var tasks = function(){
+				return $http.get(api+'/tasks')
+			}
+
+			var taskcreate = function(task){
+				return $http.post(api+'/tasks', task)
+			}
+
+			var taskupdate = function(id, task){
+				return $http.put(api+'/tasks/'+ id, task)
+			}
+
+
+			var taskdelete = function(id){
+				return $http.delete(api+'/tasks/'+ id)
+			}
+
+		
+			return {
+				getTasks: tasks,
+				save: taskcreate,
+				update: taskupdate,
+				delete: taskdelete
+			};
+		}]);
+
+	// })();
+
+</script>
+
+</body>
+</html>

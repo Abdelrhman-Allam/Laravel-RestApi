@@ -70,6 +70,7 @@ class TaskController extends Controller
         // get all request inputs as array
         $inputs = $request->all();
 
+
         /** @TODO: Validate before save into database */
 
         $task = new Task;
