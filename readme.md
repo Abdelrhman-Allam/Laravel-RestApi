@@ -7,7 +7,7 @@
     git clone https://github.com/Abdelrhman-Allam/Laravel-RestApi.git
     cd Laravel-RestApi
     composer install 
-    php artidan key:generate
+    php artisan key:generate
     
 2.configure datebase on `.env` file with your database 
 
