@@ -9,7 +9,7 @@
     composer install 
     php artidan generate:key
     
-2.configur datebase on .env file
+2.configure datebase on .env file
 3.run migrations to create tables
 
     php artisan migrate
@@ -20,6 +20,6 @@
 
 5. start Postman 
 
-    GET => /api/v1/tasks
-    GET => /api/v1/tasks/1
-    POST => /api/v1/tasks
+    `GET` => `/api/v1/tasks`
+    `GET` => `/api/v1/tasks/1`
+    `POST` => `/api/v1/tasks`
